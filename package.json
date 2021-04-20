@@ -1,0 +1,19 @@
+{
+  "name": "full-stack-open-backend",
+  "version": "1.0.0",
+  "description": "This is the backend for the exercices of the bootcamp part3",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "author": "Miguel Atencio Vargas",
+  "license": "MIT"
+}
