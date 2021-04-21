@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "12.x",
-    "npm": "6.x"
+    "npm": "7.x"
   },
   "description": "This is the backend for the exercices of the bootcamp part3",
   "main": "index.js",
