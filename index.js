@@ -57,14 +57,14 @@ app.get('/api/info', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = +req.params.id;
+  const id = req.params.id;
   const person = persons.find(item=> item.id === id);
   if(!person) return res.status(404).end();
   res.json(person);
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = +req.params.id;
+  const id = req.params.id;
   persons = persons.filter(item => item.id !== id);
   res.status(204).end();
 });
