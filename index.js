@@ -64,6 +64,10 @@ app.post('/api/persons', (req, res) => {
   if(!body.name || !body.number) return res.status(400).json({
     error: 'contact data is not provided'
   });
+  const samePerson = persons.find(item => item.name.toLocaleLowerCase() === body.name.toLocaleLowerCase());
+  if(samePerson) return res.status(400).json({
+    error: `${body.name} is already registered. Name must be unique`
+  });
   const newPerson = {
     id: genereteID(),
     name: body.name,
