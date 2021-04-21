@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
+
+
 app.use(express.json());
+
+if (process.env.NODE_ENV !== 'production') {
+  const morgan = require('morgan');
+  app.use(morgan('tiny'));
+}
 
 let persons = [
   {
@@ -75,7 +82,13 @@ app.post('/api/persons', (req, res) => {
   }
   persons = persons.concat(newPerson);
   res.json(newPerson);
-})
+});
+
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({error: 'unknow endpoint'})
+}
+app.use(unknownEndpoint)
 
 const PORT = 3001;
 app.listen(PORT, () => {
