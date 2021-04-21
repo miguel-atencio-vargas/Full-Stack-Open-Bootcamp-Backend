@@ -6,34 +6,36 @@ let persons = [
   {
     "name": "Arto Hellas",
     "number": "040-123456",
-    "id": 1
+    "id": "1"
   },
   {
     "name": "Ada Lovelace",
     "number": "39-44-5323523",
-    "id": 2
+    "id": "2"
   },
   {
     "name": "Dan Abramov",
     "number": "12-43-234345",
-    "id": 3
+    "id": "3"
   },
   {
     "name": "Miguel",
     "number": "99999",
-    "id": 4
+    "id": "4"
   },
   {
     "name": "Juan",
     "number": "12345",
-    "id": 5
+    "id": "5"
   },
   {
     "name": "John Doe",
     "number": "342423423",
-    "id": 6
+    "id": "6"
   }
 ];
+
+const genereteID = () => ''+Math.ceil(Math.random() * Number.MAX_SAFE_INTEGER);
 
 app.get('/api/persons', (req, res) => res.json(persons));
 
@@ -49,16 +51,29 @@ app.get('/api/persons/:id', (req, res) => {
   const person = persons.find(item=> item.id === id);
   if(!person) return res.status(404).end();
   res.json(person);
-})
+});
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = +req.params.id;
   persons = persons.filter(item => item.id !== id);
   res.status(204).end();
-})
+});
 
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+  if(!body.name || !body.number) return res.status(400).json({
+    error: 'contact data is not provided'
+  });
+  const newPerson = {
+    id: genereteID(),
+    name: body.name,
+    number: body.number
+  }
+  persons = persons.concat(newPerson);
+  res.json(newPerson);
+})
 
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log('Server listen on:', PORT);
-})
+});
