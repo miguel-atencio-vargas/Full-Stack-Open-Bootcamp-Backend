@@ -1,13 +1,14 @@
 const express = require('express');
+const morgan = require('morgan');
+
 const app = express();
 
 
 app.use(express.json());
 
-if (process.env.NODE_ENV !== 'production') {
-  const morgan = require('morgan');
-  app.use(morgan('tiny'));
-}
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+morgan.token('body', req => JSON.stringify(req.body))
+  
 
 let persons = [
   {
@@ -42,7 +43,7 @@ let persons = [
   }
 ];
 
-const genereteID = () => ''+Math.ceil(Math.random() * Number.MAX_SAFE_INTEGER);
+const genereteID = () => '' +Math.ceil(Math.random() * Number.MAX_SAFE_INTEGER);
 
 app.get('/api/persons', (req, res) => res.json(persons));
 
