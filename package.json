@@ -13,13 +13,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../'Full Stack Open Bootcamp'/part2/phonebook/ && npm run build --prod && cp -r build ../../../'Full Stack Open Bootcamp Backend'/",
     "deploy": "git push heroku master",
-    
     "deploy:full": "npm run build:ui && git add . && git commit -m app-deployed-ui-build && npm run deploy",
     "logs:prod": "heroku logs --tail"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongoose": "^5.12.5",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
