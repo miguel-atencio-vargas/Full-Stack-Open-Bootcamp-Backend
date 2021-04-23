@@ -63,7 +63,6 @@ app.get('/api/people', (req, res) => {
 
 // get only one contact provided an id
 app.get('/api/people/:id', (req, res) => {
-  console.log(req.params.id);
   Person.findById(req.params.id)
   .then(person => res.json(person))
   .catch(err => res.status(404).send({
@@ -77,23 +76,22 @@ app.get('/api/people/:id', (req, res) => {
 //   res.status(204).end();
 // });
 
-// app.post('/api/people', (req, res) => {
-//   const body = req.body;
-//   if(!body.name || !body.number) return res.status(400).json({
-//     error: 'contact data is not provided'
-//   });
-//   const samePerson = persons.find(item => item.name.toLocaleLowerCase() === body.name.toLocaleLowerCase());
-//   if(samePerson) return res.status(400).json({
-//     error: `${body.name} is already registered. Name must be unique`
-//   });
-//   const newPerson = {
-//     id: genereteID(),
-//     name: body.name,
-//     number: body.number
-//   }
-//   persons = persons.concat(newPerson);
-//   res.json(newPerson);
-// });
+app.post('/api/people', (req, res) => {
+  const body = req.body;
+  if(!body.name || !body.number) return res.status(400).json({
+    error: 'contact data is not provided'
+  });
+
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  });
+  person.save()
+  .then(person => res.json(person))
+  .catch(err => res.status(500).send({
+    message: 'An error occurred the contact was not saved'
+  }))
+});
 
 
 const unknownEndpoint = (req, res) => {
