@@ -47,6 +47,7 @@ app.get('/api/people/:id', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// delete a contact with a valid id provided
 app.delete('/api/people/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
     .then(result => {
@@ -56,6 +57,7 @@ app.delete('/api/people/:id', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// create a new contact with required values
 app.post('/api/people', (req, res) => {
   const body = req.body;
   if(!body.name || !body.number) return res.status(400).json({
@@ -72,6 +74,23 @@ app.post('/api/people', (req, res) => {
     }));
 });
 
+// update a contact with a valid ID provided
+app.put('/api/people/:id', (req, res, next) => {
+  const body = req.body;
+  if(!body.name || !body.number) return res.status(400).send({
+    message: 'data not provided'
+  });
+  const contact = {
+    name: body.name,
+    number: body.number
+  }
+  Person.findByIdAndUpdate(req.params.id, contact, {new: true})
+    .then(newPerson => {
+      if(!newPerson) return res.status(404).send({message: 'Contact not found'})
+      res.json(newPerson);
+    })
+    .catch(err => next(err));
+});
 
 const unknownEndpoint = (req, res) => res.status(404).send({
   error: 'unknown endpoint'
