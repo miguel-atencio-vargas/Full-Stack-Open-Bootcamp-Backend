@@ -23,22 +23,26 @@ app.use(requestLogger);
 
 
 // get info about the API
-/*
-app.get('/api/info', (req, res) => {
-  const HTMLdata = `
-    <p>Phonebook has info for ${persons.length} people.</p>
-    <p>${new Date()}</p>`;
-  res.send(HTMLdata)
-});*/
+
+app.get('/info', (req, res) => {
+  Person.countDocuments({})
+    .then(counter => {
+      console.log(counter);
+      const HTMLdata = `
+        <p>Phonebook has info for ${counter} contacts.</p>
+        <p>${new Date()}</p>`;
+      res.send(HTMLdata)
+    });
+});
 
 
 // endpoint for get all the contacts
-app.get('/api/people', (req, res) => {
+app.get('/api/persons', (req, res) => {
   Person.find({}).then(people => res.json(people))
 });
 
 // get only one contact provided an id
-app.get('/api/people/:id', (req, res, next) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
     .then(person => {
       if(!person) return res.status(404).send({ message: 'Contact not found'});
@@ -48,7 +52,7 @@ app.get('/api/people/:id', (req, res, next) => {
 });
 
 // delete a contact with a valid id provided
-app.delete('/api/people/:id', (req, res, next) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
     .then(result => {
       if(!result) return res.status(404).send({ message: 'Contact not found'});
@@ -58,7 +62,7 @@ app.delete('/api/people/:id', (req, res, next) => {
 });
 
 // create a new contact with required values
-app.post('/api/people', (req, res) => {
+app.post('/api/persons', (req, res) => {
   const body = req.body;
   if(!body.name || !body.number) return res.status(400).json({
     error: 'contact data is not provided'
@@ -75,7 +79,7 @@ app.post('/api/people', (req, res) => {
 });
 
 // update a contact with a valid ID provided
-app.put('/api/people/:id', (req, res, next) => {
+app.put('/api/persons/:id', (req, res, next) => {
   const body = req.body;
   if(!body.name || !body.number) return res.status(400).send({
     message: 'data not provided'
@@ -108,3 +112,4 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log('Server listen on:', PORT));
+
