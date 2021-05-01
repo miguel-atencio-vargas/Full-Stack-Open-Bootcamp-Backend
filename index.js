@@ -62,7 +62,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
 });
 
 // create a new contact with required values
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
   if(!body.name || !body.number) return res.status(400).json({
     error: 'contact data is not provided'
@@ -73,9 +73,7 @@ app.post('/api/persons', (req, res) => {
   });
   person.save()
     .then(person => res.json(person))
-    .catch(err => res.status(500).send({
-      message: 'An error occurred the contact was not saved'
-    }));
+    .catch(err => next(err));
 });
 
 // update a contact with a valid ID provided
@@ -101,12 +99,17 @@ const unknownEndpoint = (req, res) => res.status(404).send({
 });
 app.use(unknownEndpoint);
 
-const errorHandler = (error, req, res, next) => {
-  console.log(error);
-  if(error.name === 'CastError') return res.status(400).send({
-    message: 'Malformatted ID'
-  });
-  next(error);
+const errorHandler = (exception, req, res, next) => {
+  const { name, value, reason, message} = exception;
+  console.log('Name:', name);
+  console.log('Value:', value);
+  const errorMessage = reason || message;
+  console.log('Reason:', String(errorMessage));
+  let error;
+  if(name === 'CastError') error = 'Malformatted ID';
+  if(name === 'ValidationError') error = errorMessage;
+  if(error) return res.status(400).send({ error });
+  next(exception);
 }
 app.use(errorHandler);
 
