@@ -82,13 +82,20 @@ app.put('/api/persons/:id', (req, res, next) => {
   if(!body.name || !body.number) return res.status(400).send({
     message: 'data not provided'
   });
+  const options = { 
+    new: true, 
+    runValidators: true, 
+    context: 'query'
+  }
   const contact = {
     name: body.name,
     number: body.number
   }
-  Person.findByIdAndUpdate(req.params.id, contact, {new: true})
+  Person.findByIdAndUpdate(req.params.id, contact, options)
     .then(newPerson => {
-      if(!newPerson) return res.status(404).send({message: 'Contact not found'})
+      if(!newPerson) return res.status(404).send({
+        message: 'Contact not found'
+      });
       res.json(newPerson);
     })
     .catch(err => next(err));
@@ -108,7 +115,7 @@ const errorHandler = (exception, req, res, next) => {
   let error;
   if(name === 'CastError') error = 'Malformatted ID';
   if(name === 'ValidationError') error = errorMessage;
-  if(error) return res.status(400).send({ error });
+  if(error) return res.status(400).send({ error, name });
   next(exception);
 }
 app.use(errorHandler);
