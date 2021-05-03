@@ -36,7 +36,7 @@ if(!name || !number) {
   person.save().then(result => {
     // change the format output
     console.log(`added ${result.name} ${result.number} to phonebook`);
-    mongoose.connection.close()
-  })
+    mongoose.connection.close();
+  });
 }
 

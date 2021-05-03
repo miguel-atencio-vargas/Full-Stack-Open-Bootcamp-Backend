@@ -11,7 +11,7 @@ mongoose.connect(url, {
   useFindAndModify: false,
   useCreateIndex: true
 })
-  .then(result => console.log('connected to MongoDB'))
+  .then(() => console.log('connected to MongoDB'))
   .catch(err => console.log('error connecting to MongoDB:', err.message));
 
 const personSchema = new mongoose.Schema({
@@ -25,7 +25,7 @@ const personSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 8
-  } 
+  }
 });
 
 personSchema.set('toJSON', {

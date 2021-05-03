@@ -14,7 +14,8 @@
     "build:ui": "rm -rf build && cd ../'Full Stack Open Bootcamp'/part2/phonebook/ && npm run build --prod && cp -r build ../../../'Full Stack Open Bootcamp Backend'/",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m full-stack && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
+    "eslint": "^7.25.0",
     "nodemon": "^2.0.2"
   },
   "author": "Miguel Atencio Vargas",
